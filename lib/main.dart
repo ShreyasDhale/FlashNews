@@ -1,6 +1,7 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:news_app/Pages/Offline.dart';
 import 'package:news_app/Pages/SplashScreen.dart';
 import 'package:news_app/vars/globals.dart';
 
@@ -71,8 +72,10 @@ class _MyAppState extends State<MyApp> {
         title: 'Flash News',
         theme: AppTheme.currentTheme,
         debugShowCheckedModeBanner: false,
-        home: SplashScreen(
-          toggleTheme: toogleTheme,
-        ));
+        home: (_currentScreenType == ScreenType.login)
+            ? SplashScreen(
+                toggleTheme: toogleTheme,
+              )
+            : const OfflinePage());
   }
 }
