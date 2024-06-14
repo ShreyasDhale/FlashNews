@@ -1,7 +1,10 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:news_app/Pages/SplashScreen.dart';
 import 'package:news_app/vars/globals.dart';
+
+enum ScreenType { login, offline }
 
 void main() {
   runApp(const MyApp());
@@ -15,10 +18,28 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  late Connectivity _connectivity;
+  late ConnectivityResult _connectionStatus;
+  ScreenType _currentScreenType = ScreenType.login;
+
   @override
   void initState() {
     super.initState();
     initTheme();
+    _connectivity = Connectivity();
+    _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+    _updateConnectionStatus(ConnectivityResult.none);
+  }
+
+  Future<void> _updateConnectionStatus(ConnectivityResult result) async {
+    setState(() {
+      _connectionStatus = result;
+      if (_connectionStatus == ConnectivityResult.none) {
+        _currentScreenType = ScreenType.offline;
+      } else {
+        _currentScreenType = ScreenType.login;
+      }
+    });
   }
 
   void initTheme() {
